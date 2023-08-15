@@ -20,10 +20,8 @@ public class LocalizacaoApplication implements CommandLineRunner{
 		SpringApplication.run(LocalizacaoApplication.class, args);
 	}
 
-	@Transactional
-	void salvarCidada(){
-		var cidade = new Cidade(1L,"São Paulo", 12396372L);
-		cidadeRepository.save(cidade);
+	void listarCidadePorNome(){
+		cidadeRepository.findByNomeStartingWith("Porto").forEach(System.out::println);
 	}
 
 	void listarCidade(){
@@ -32,9 +30,8 @@ public class LocalizacaoApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		salvarCidada();
-		listarCidade();
-		
+		listarCidade();	
+		listarCidadePorNome();
 	}
 
 }
