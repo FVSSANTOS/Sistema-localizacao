@@ -16,3 +16,5 @@ values
     (7,'Porto Velho',12396372),
     (8,'Palmas',12396372),
     (9,'Recife',12396372);
+
+  selext * from tb_cidade where nome like "%"  

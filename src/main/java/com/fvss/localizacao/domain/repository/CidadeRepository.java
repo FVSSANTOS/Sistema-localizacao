@@ -2,7 +2,9 @@ package com.fvss.localizacao.domain.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.fvss.localizacao.domain.entity.Cidade;
 
@@ -17,5 +19,12 @@ public interface CidadeRepository extends JpaRepository<Cidade,Long>{
      List<Cidade> findByNomeContaining(String nome);
 
      List<Cidade> findByHabitantes(Long habitantes);
+
+     @Query("select c from Cidade c where lower(c.nome) like lower(?1)")
+     List<Cidade> findByLikeNome(String nome, Sort sort);
     
+     List<Cidade> findByHabitantesLessThan(Long habitantes);
+
+     List<Cidade> findByHabitantesGreaterThan(Long habitantes);
+
 }
