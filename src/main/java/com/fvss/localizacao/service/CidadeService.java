@@ -2,9 +2,12 @@ package com.fvss.localizacao.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
 import com.fvss.localizacao.domain.entity.Cidade;
@@ -36,6 +39,11 @@ public class CidadeService {
 	}
 
 	public List<Cidade> filtroDinaminco(Cidade cidade){
-		
+		ExampleMatcher matcher =  ExampleMatcher.matching()
+		.withIgnoreCase()
+		.withStringMatcher(ExampleMatcher.StringMatcher.STARTING)
+		.withIncludeNullValues();
+		Example<Cidade> example = Example.of(cidade, matcher);
+		return repository.findAll(example);
 	}
 }
