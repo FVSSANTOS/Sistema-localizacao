@@ -8,10 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.fvss.localizacao.domain.entity.Cidade;
 import com.fvss.localizacao.domain.repository.CidadeRepository;
+import static com.fvss.localizacao.domain.repository.specs.CidadeSpecs.*;
 
 @Service
 public class CidadeService {
@@ -41,9 +43,19 @@ public class CidadeService {
 	public List<Cidade> filtroDinaminco(Cidade cidade){
 		ExampleMatcher matcher =  ExampleMatcher.matching()
 		.withIgnoreCase()
-		.withStringMatcher(ExampleMatcher.StringMatcher.STARTING)
-		.withIncludeNullValues();
+		.withStringMatcher(ExampleMatcher.StringMatcher.STARTING);
 		Example<Cidade> example = Example.of(cidade, matcher);
 		return repository.findAll(example);
+	}
+
+	public void listarCidadeByNomeSpec(){
+		repository.findAll(nomeEqual("São Paulo").and(habitantesGreaterThan(100000))).forEach(System.out::println);
+	}
+
+	public void listarCidadePorNomeSql(){
+		repository
+			.findByNomeSqlNativo("São Paulo")
+			.stream().map(cidadeProjection -> new Cidade(cidadeProjection.getId(), cidadeProjection.getNome(), null))
+			.forEach(System.out::println);
 	}
 }
